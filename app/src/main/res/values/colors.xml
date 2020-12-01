@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#FAFAFA</color>
+    <color name="colorAccent">#3F3F3F</color>
+    <color name="background">#fff</color>
+    <color name="black">#000</color>
+    <color name="cardBackground">#FAFAFA</color>
+    <color name="text_main">#fff</color>
+    <color name="text_sub">#F9F9F9</color>
+    <color name="tab_color">#5072DD</color>
+    <color name="side_nav_light">#80A9D4FD</color>
+    <color name="side_nav">#5072DD</color>
+    <color name="bookmark_book">#A9D4FD</color>
+    <color name="login_lock">#5072DD</color>
+    <color name="login_user">#FF7777</color>
+    <color name="connection_text_icon">#fff</color>
+    <color name="connection_back">#FF99CC00</color>
+    <color name="no_connection">#FFFF0000</color>
+    <color name="newzzzy_color">#000</color>
+</resources>

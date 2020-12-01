@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:title="About me">
+
+        <menu>
+
+            <item
+                android:id="@+id/twitter"
+                android:title="Twitter"
+                android:icon="@drawable/ic_twitter"/>
+            <item
+                android:id="@+id/instagram"
+                android:title="Instagram"
+                android:icon="@drawable/ic_instagram"/>
+
+            <item
+                android:id="@+id/gitHub"
+                android:title="GitHub"
+                android:icon="@drawable/ic_github"/>
+
+            <item
+                android:id="@+id/website"
+                android:title="Website"
+                android:icon="@drawable/ic_web"/>
+
+        </menu>
+
+    </item>
+
+    <item android:title="Settings">
+
+        <menu>
+
+            <item
+                android:id="@+id/modeSwitch"
+                android:title="Dark mode"
+                app:actionLayout="@layout/mode_switch" />
+
+            <item
+                android:id="@+id/logOut"
+                android:title="Log out"
+                android:iconTint="@android:color/holo_red_light"/>
+
+        </menu>
+
+    </item>
+
+</menu>
