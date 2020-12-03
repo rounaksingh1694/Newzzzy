@@ -21,7 +21,7 @@ class BookmarkAdapter(private val clickListener: (Bookmark) -> Unit,
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookmarkViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = DataBindingUtil.inflate<AdapterBookmarkBinding>(inflater, R.layout.adapter_layout, parent, false)
+        val binding = DataBindingUtil.inflate<AdapterBookmarkBinding>(inflater, R.layout.adapter_bookmark, parent, false)
         val holder = BookmarkViewHolder(binding, clickListener, longClickListener)
         return holder
     }
@@ -51,7 +51,7 @@ class BookmarkAdapter(private val clickListener: (Bookmark) -> Unit,
 
         fun bind(article: Bookmark) {
 
-            if(article.urlToImage != null) {
+            if(article.urlToImage != null && article.urlToImage.isNotEmpty()) {
                 Picasso.get()
                     .load(article.urlToImage)
                     .into(binder.imageView)
@@ -60,7 +60,7 @@ class BookmarkAdapter(private val clickListener: (Bookmark) -> Unit,
             binder.textViewTitle.text = article.title
             binder.textViewDescription.text = article.description
             binder.textViewCategory.text = article.category
-            binder.textViewSource.text = article.source.name
+            binder.textViewSource.setText("${article.sourceName[0].toString().toUpperCase()}${article.sourceName.substring(1)}")
             binder.textViewDate.text = article.publishedAt.substring(0, article.publishedAt.indexOf("T"))
             Log.i("Added", "TO RV")
 

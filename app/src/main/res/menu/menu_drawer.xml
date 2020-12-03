@@ -38,11 +38,6 @@
                 android:title="Dark mode"
                 app:actionLayout="@layout/mode_switch" />
 
-            <item
-                android:id="@+id/logOut"
-                android:title="Log out"
-                android:iconTint="@android:color/holo_red_light"/>
-
         </menu>
 
     </item>

@@ -20,6 +20,6 @@ interface BookmarkDAO {
     suspend fun deleteAllBookmarks()
 
     @Query("SELECT * FROM bookmark_database")
-    suspend fun getAllBookmarks(): LiveData<List<Bookmark>>
+    fun getAllBookmarks(): LiveData<List<Bookmark>>
 
 }

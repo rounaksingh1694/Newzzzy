@@ -8,34 +8,34 @@ import androidx.room.PrimaryKey
 data class Bookmark(
 
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo
-    val id: Int = 0,
+    @ColumnInfo(name = "id")
+    var id: Int = 0,
 
-    @ColumnInfo
-    val author: String = "",
+    @ColumnInfo(name = "author")
+    var author: String = "",
 
-    @ColumnInfo
-    val content: String = "",
+    @ColumnInfo(name = "content")
+    var content: String = "",
 
-    @ColumnInfo
-    val description: String = "",
+    @ColumnInfo(name = "description")
+    var description: String = "",
 
-    @ColumnInfo
-    val publishedAt: String = "",
+    @ColumnInfo(name = "publishedAt")
+    var publishedAt: String = "",
 
-    @ColumnInfo
-    val source: NewsSource,
+    @ColumnInfo(name = "title")
+    var title: String = "",
 
-    @ColumnInfo
-    val title: String = "",
+    @ColumnInfo(name = "url")
+    var url: String = "",
 
-    @ColumnInfo
-    val url: String = "",
+    @ColumnInfo(name = "urlToImage")
+    var urlToImage: String = "",
 
-    @ColumnInfo
-    val urlToImage: String = "",
+    @ColumnInfo(name = "category")
+    var category: String = "",
 
-    @ColumnInfo
-    val category: String = ""
+    @ColumnInfo(name = "sourceName")
+    var sourceName: String = ""
 
 )

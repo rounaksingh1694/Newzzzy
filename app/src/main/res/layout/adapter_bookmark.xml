@@ -3,7 +3,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="1dp">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView"
@@ -61,7 +62,6 @@
                         android:id="@+id/textViewCategory"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_marginTop="@dimen/margin_8dp"
                         android:layout_marginBottom="@dimen/margin_8dp"
                         android:layout_gravity="start"
                         android:fontFamily="@font/poppins_semibolditalic"

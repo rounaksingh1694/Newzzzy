@@ -8,10 +8,8 @@
     <color name="text_main">#fff</color>
     <color name="text_sub">#F9F9F9</color>
     <color name="tab_color">#5072DD</color>
-    <color name="side_nav_light">#805072DD</color>
+    <color name="side_nav_light">#B35072DD</color>
     <color name="side_nav">#A9D4FD</color>
-    <color name="login_lock">#5072DD</color>
-    <color name="login_user">#FF7777</color>
     <color name="connection_text_icon">#fff</color>
     <color name="connection_back">#FF99CC00</color>
     <color name="no_connection">#FFFF0000</color>

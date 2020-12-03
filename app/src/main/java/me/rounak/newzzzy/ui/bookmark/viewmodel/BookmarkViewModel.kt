@@ -21,6 +21,8 @@ class BookmarkViewModel(private val repository: NewsRepository) : ViewModel(), O
         repository.deleteAllBookmarks()
     }
 
+    val bookmarks = repository.bookmarks
+
     override fun removeOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {}
 
     override fun addOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {}

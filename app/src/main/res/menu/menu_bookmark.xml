@@ -12,8 +12,8 @@
         android:title="Copy link" />
 
     <item
-        android:id="@+id/addToBookmark"
+        android:id="@+id/deleteBookmark"
         android:iconTint="#000"
-        android:title="Bookmark" />
+        android:title="Delete" />
 
 </menu>

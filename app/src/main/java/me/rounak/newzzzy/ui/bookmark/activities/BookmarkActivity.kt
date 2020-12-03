@@ -2,12 +2,20 @@ package me.rounak.newzzzy.ui.bookmark.activities
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.app.Dialog
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.MenuInflater
 import android.view.View
 import android.view.animation.AnimationUtils
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SwitchCompat
@@ -19,30 +27,22 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
-import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.dialog_clear_bookmarks.*
 import me.rounak.newzzzy.R
-import me.rounak.newzzzy.data.local.BookmarkDatabase
-import me.rounak.newzzzy.data.repository.BookmarkRepository
-import me.rounak.newzzzy.data.repository.NewsRepository
 import me.rounak.newzzzy.databinding.ActivityBookmarkBinding
-import me.rounak.newzzzy.databinding.ActivityMainBinding
+import me.rounak.newzzzy.ui.base.BaseActivity
 import me.rounak.newzzzy.ui.bookmark.adapter.BookmarkAdapter
 import me.rounak.newzzzy.ui.bookmark.viewmodel.BookmarkViewModel
 import me.rounak.newzzzy.ui.bookmark.viewmodel.BookmarkViewModelFactory
-import me.rounak.newzzzy.ui.main.adapter.NewsAdapter
-import me.rounak.newzzzy.ui.main.viewmodel.MainViewModel
-import me.rounak.newzzzy.ui.main.viewmodel.MainViewModelFactory
+import me.rounak.newzzzy.ui.webview.WebViewActivity
 import me.rounak.newzzzy.utils.helper.NetworkObserver
 import me.rounak.newzzzy.utils.model.Bookmark
-import me.rounak.newzzzy.utils.model.NewsArticle
 
-class BookmarkActivity : AppCompatActivity() {
+class BookmarkActivity : BaseActivity<BookmarkViewModel, ActivityBookmarkBinding>() {
 
     private lateinit var adapter: BookmarkAdapter
-    private lateinit var binding: ActivityBookmarkBinding
-    private lateinit var viewModel: MainViewModel
-    private lateinit var repository: NewsRepository
+    lateinit var bookmarkViewModel: BookmarkViewModel
 
     private fun setUpViewPager() {
 
@@ -64,11 +64,78 @@ class BookmarkActivity : AppCompatActivity() {
         }
         viewPager.setPageTransformer(compositePageTransformer)
 
+        bookmarkViewModel.bookmarks.observe(this, Observer { bookmarks ->
+            adapter.addToArticles(bookmarks as ArrayList<Bookmark>)
+            displayNoBookmarksMessage()
+            Log.i("Bookmarks", bookmarks.toString())
+        })
+
     }
 
-    fun bookmarkArticleClickListener(bookmark: Bookmark) {}
+    fun bookmarkArticleClickListener(bookmark: Bookmark) {
 
-    fun bookmarkArticleLongClickListener(bookmark: Bookmark, view: View) {}
+        val intent = Intent(applicationContext, WebViewActivity::class.java)
+        intent.putExtra("url", bookmark.url)
+        startActivity(intent)
+
+    }
+
+    fun bookmarkArticleLongClickListener(bookmark: Bookmark, view: View) {
+
+        val popup = PopupMenu(applicationContext, view)
+        val menuInflater = MenuInflater(applicationContext)
+
+        menuInflater.inflate(R.menu.menu_bookmark, popup.menu)
+        popup.show()
+
+        popup.setOnMenuItemClickListener { item ->
+
+            when(item.itemId) {
+
+                R.id.share -> {
+
+                    val intent = Intent(Intent.ACTION_SEND)
+                    intent.setType("text/url")
+
+                    intent.putExtra(Intent.EXTRA_SUBJECT, "News link")
+                    intent.putExtra(Intent.EXTRA_TEXT, bookmark.url)
+
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
+                    startActivity(Intent.createChooser(intent, "Share article link"))
+
+                    return@setOnMenuItemClickListener true
+
+                }
+
+                R.id.copy -> {
+
+                    val clipboard: ClipboardManager? =
+                        getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
+                    val clip = ClipData.newPlainText("News link", bookmark.url)
+                    clipboard?.setPrimaryClip(clip)
+
+                    return@setOnMenuItemClickListener true
+
+                }
+
+                R.id.deleteBookmark -> {
+
+                    bookmarkViewModel.deleteBookmark(bookmark)
+
+                    displayNoBookmarksMessage()
+
+                    return@setOnMenuItemClickListener true
+
+                }
+
+                else -> return@setOnMenuItemClickListener false
+
+            }
+
+        }
+
+    }
 
     private fun openOrCloseNavDrawer() {
 
@@ -145,18 +212,6 @@ class BookmarkActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
 
-                /*R.id.logOut -> {
-
-                    auth.signOut()
-                    val intent = Intent(applicationContext, SplashAndLogInActivity::class.java)
-                    intent.putExtra("hasLoggedOut", true)
-                    startActivity(intent)
-                    finish()
-
-                    return@setNavigationItemSelectedListener true
-
-                }*/
-
                 R.id.twitter -> {
 
                     val twitterUrl = "https://twitter.com/RounakSingh_16"
@@ -205,22 +260,60 @@ class BookmarkActivity : AppCompatActivity() {
 
     }
 
+    fun displayNoBookmarksMessage() {
+
+        if(adapter.articles.isEmpty()) {
+            binding.textViewNoBookmarks.visibility = View.VISIBLE
+            binding.textViewExplore.visibility = View.VISIBLE
+
+            binding.textViewExplore.setOnClickListener { finish() }
+        } else {
+            binding.textViewNoBookmarks.visibility = View.INVISIBLE
+            binding.textViewExplore.visibility = View.INVISIBLE
+        }
+
+    }
+
+    private fun setUpClearBookmarks() {
+
+        binding.imageViewClearBookmarks.setOnClickListener {
+            
+            val dialog = Dialog(this)
+            dialog.setContentView(R.layout.dialog_clear_bookmarks)
+
+            dialog.textViewClearNo.setOnClickListener { dialog.dismiss() }
+
+            dialog.textViewClearYes.setOnClickListener {
+                bookmarkViewModel.deleteAllBookmarks()
+                displayNoBookmarksMessage()
+                dialog.dismiss()
+            }
+
+            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog.show()
+
+        }
+
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bookmark)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_bookmark)
 
-//        repository = NewsRepository(BookmarkDatabase.getInstance(applicationContext).bookmarkDAO)
-
         val factory =
-            MainViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, factory).get(MainViewModel::class.java)
+            BookmarkViewModelFactory(repository)
+        bookmarkViewModel = ViewModelProvider(this, factory).get(BookmarkViewModel::class.java)
 
         setUpNavigationDrawer()
         setUpViewPager()
         checkNetworkState()
+        setUpClearBookmarks()
+        displayNoBookmarksMessage()
 
     }
+
+    override fun getLayout(): Int = R.layout.activity_bookmark
 
 }

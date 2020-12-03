@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "10e3ad86bec8309ba430d96b4b3b83f4",
+    "identityHash": "5b05362d4386f5ccb761f7d1b3b11972",
     "entities": [
       {
         "tableName": "bookmark_database",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `author` TEXT NOT NULL, `content` TEXT NOT NULL, `description` TEXT NOT NULL, `publishedAt` TEXT NOT NULL, `source` TEXT NOT NULL, `title` TEXT NOT NULL, `url` TEXT NOT NULL, `urlToImage` TEXT NOT NULL, `category` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `author` TEXT NOT NULL, `content` TEXT NOT NULL, `description` TEXT NOT NULL, `publishedAt` TEXT NOT NULL, `title` TEXT NOT NULL, `url` TEXT NOT NULL, `urlToImage` TEXT NOT NULL, `category` TEXT NOT NULL, `sourceName` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -39,12 +39,6 @@
             "notNull": true
           },
           {
-            "fieldPath": "source",
-            "columnName": "source",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
             "fieldPath": "title",
             "columnName": "title",
             "affinity": "TEXT",
@@ -67,6 +61,12 @@
             "columnName": "category",
             "affinity": "TEXT",
             "notNull": true
+          },
+          {
+            "fieldPath": "sourceName",
+            "columnName": "sourceName",
+            "affinity": "TEXT",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -82,7 +82,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '10e3ad86bec8309ba430d96b4b3b83f4')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5b05362d4386f5ccb761f7d1b3b11972')"
     ]
   }
 }

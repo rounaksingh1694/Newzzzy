@@ -6,6 +6,7 @@
     <dimen name="source_size">12sp</dimen>
     <dimen name="date_size">12sp</dimen>
     <dimen name="padding_8dp">8dp</dimen>
+    <dimen name="padding_12dp">12dp</dimen>
     <dimen name="padding_20dp">20dp</dimen>
     <dimen name="padding_18dp">18dp</dimen>
     <dimen name="card_radius">10dp</dimen>
@@ -16,6 +17,7 @@
     <dimen name="margin_8dp">8dp</dimen>
     <dimen name="text_14sp">14sp</dimen>
     <dimen name="text_16sp">16sp</dimen>
+    <dimen name="text_20sp">20sp</dimen>
     <dimen name="text_24sp">24sp</dimen>
 
 </resources>

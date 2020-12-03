@@ -7,7 +7,7 @@ import me.rounak.newzzzy.utils.model.Bookmark
 
 class NewsRepository (private val dao: BookmarkDAO) {
 
-    suspend fun getAllBookmarks() = dao.getAllBookmarks()
+    val bookmarks = dao.getAllBookmarks()
 
     suspend fun insertBookmark(bookmark: Bookmark) {
         dao.insertBookmark(bookmark)

@@ -26,7 +26,7 @@ abstract class BookmarkDatabase : RoomDatabase() {
                     instance = Room.databaseBuilder(
                         context.applicationContext,
                         BookmarkDatabase::class.java,
-                        "subscriber_data_database"
+                        "bookmark_database"
                     ).build()
                 }
 

@@ -7,6 +7,7 @@ import androidx.lifecycle.*
 import kotlinx.coroutines.launch
 import me.rounak.newzzzy.data.repository.NewsRepository
 import me.rounak.newzzzy.utils.model.Bookmark
+import me.rounak.newzzzy.utils.model.NewsArticle
 import me.rounak.newzzzy.utils.model.NewsResult
 import retrofit2.Response
 
@@ -48,12 +49,21 @@ class MainViewModel(private val newsRepository: NewsRepository) : ViewModel(), O
 
     }
 
+    fun articleToBookmark(article: NewsArticle, category: String): Bookmark = Bookmark(
+        id = 0,
+        author = article.author ?: "",
+        content = article.content ?: "",
+        description = article.description ?: "",
+        publishedAt = article.publishedAt ?: "",
+        title = article.title ?: "",
+        url = article.url ?: "",
+        urlToImage = article.urlToImage ?: "",
+        category = category.capitalize() ?: "",
+        sourceName = article.source.name ?: ""
+    )
+
     fun insertBookmark(bookmark: Bookmark) = viewModelScope.launch {
         newsRepository.insertBookmark(bookmark)
-    }
-
-    fun deleteBookmark(bookmark: Bookmark) = viewModelScope.launch {
-        newsRepository.deleteBookmark(bookmark)
     }
 
     fun deleteAllBookmarks() = viewModelScope.launch {

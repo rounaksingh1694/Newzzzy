@@ -4,15 +4,7 @@
     <string name="business">Business</string>
     <string name="sports">Sports</string>
     <string name="top_headlines">Top Headlines</string>
-    <string name="business_headlines">Business Headlines</string>
-    <string name="sports_headlines">Sports Headlines</string>
-    <string name="login_page_greeting">Namaste.</string>
-    <string name="enter_password">Enter your password</string>
-    <string name="enter_email">Enter your email</string>
-    <string name="already_a_user_log_in">Already a user? Log in.</string>
-    <string name="new_user_sign_up">New here? Sign up.</string>
-    <string name="sign_up">Sign up</string>
-    <string name="log_in">Log in</string>
+    <string name="bookmarks_heading">Bookmarks</string>
     <string name="science">Science</string>
     <string name="tech">Technology</string>
     <string name="health">Health</string>
@@ -20,4 +12,8 @@
     <string name="nav_header_title">Newzzzy.</string>
     <string name="connection_back">Back online</string>
     <string name="no_connection">No internet</string>
+    <string name="dialog_heading">This action cannot be undone</string>
+    <string name="dialog_content">Are you sure you want to delete all your bookmarks?</string>
+    <string name="dialog_no">No, I\'m not</string>
+    <string name="dialog_yes">Yes, I\'m sure</string>
 </resources>

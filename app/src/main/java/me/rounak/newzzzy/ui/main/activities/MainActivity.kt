@@ -6,7 +6,6 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
-import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -15,7 +14,6 @@ import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.PopupMenu
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.ContextCompat
@@ -29,9 +27,9 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main.*
 import me.rounak.newzzzy.R
-import me.rounak.newzzzy.data.local.BookmarkDatabase
-import me.rounak.newzzzy.data.repository.NewsRepository
 import me.rounak.newzzzy.databinding.ActivityMainBinding
+import me.rounak.newzzzy.ui.base.BaseActivity
+import me.rounak.newzzzy.ui.bookmark.activities.BookmarkActivity
 import me.rounak.newzzzy.ui.main.adapter.NewsAdapter
 import me.rounak.newzzzy.ui.main.viewmodel.MainViewModel
 import me.rounak.newzzzy.ui.main.viewmodel.MainViewModelFactory
@@ -39,14 +37,12 @@ import me.rounak.newzzzy.ui.webview.WebViewActivity
 import me.rounak.newzzzy.utils.helper.NetworkObserver
 import me.rounak.newzzzy.utils.model.NewsArticle
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>() {
 
     private val country = "in"
 
     private lateinit var adapter: NewsAdapter
-    private lateinit var binding: ActivityMainBinding
-    private lateinit var viewModel: MainViewModel
-    private lateinit var repository: NewsRepository
+    private lateinit var mainViewModel: MainViewModel
     private lateinit var tabLayoutListener: TabLayout.OnTabSelectedListener
 
     private fun setUpViewPager() {
@@ -75,9 +71,9 @@ class MainActivity : AppCompatActivity() {
 
         setUpViewPager()
         adapter.clear()
-        viewModel.getNewsByCountryAndCategory(country, category)
+        mainViewModel.getNewsByCountryAndCategory(country, category)
 
-        viewModel.newsResponse.observe(this, Observer { result ->
+        mainViewModel.newsResponse.observe(this, Observer { result ->
 
             if(result.body()?.totalResults != 0) {
 
@@ -170,6 +166,14 @@ class MainActivity : AppCompatActivity() {
 
                 }
 
+                R.id.addToBookmark -> {
+
+                    mainViewModel.insertBookmark(mainViewModel.articleToBookmark(article, getCategoryFromPosition(binding.tabLayout.selectedTabPosition)))
+
+                    return@setOnMenuItemClickListener true
+
+                }
+
                 else -> return@setOnMenuItemClickListener false
 
             }
@@ -183,7 +187,7 @@ class MainActivity : AppCompatActivity() {
         binding.refreshLayout.setOnRefreshListener {
 
             adapter.clear()
-            binding.refreshLayout.isRefreshing = viewModel.refreshStatus.value!!
+            binding.refreshLayout.isRefreshing = mainViewModel.refreshStatus.value!!
             getNews(country, getCategoryFromPosition(binding.tabLayout.selectedTabPosition))
 
         }
@@ -212,6 +216,9 @@ class MainActivity : AppCompatActivity() {
 
             } else {
 
+                if(adapter.articles.isEmpty())
+                    getNews(country, getCategoryFromPosition(binding.tabLayout.selectedTabPosition))
+
                 binding.layoutNetworkState.setBackgroundColor(ContextCompat.getColor(this, R.color.connection_back))
                 binding.textViewConnectionStatus.text = getString(R.string.connection_back)
                 binding.textViewConnectionStatus.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_connection_back, 0, 0, 0)
@@ -233,6 +240,15 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
+
+    }
+
+    private fun setUpBookmarkButton() {
+
+        binding.imageViewBookmarks.setOnClickListener {
+            val intent = Intent(applicationContext, BookmarkActivity::class.java)
+            startActivity(intent)
+        }
 
     }
 
@@ -264,18 +280,6 @@ class MainActivity : AppCompatActivity() {
                     "It works!",
                     Toast.LENGTH_SHORT
                 ).show()
-
-                /*R.id.logOut -> {
-
-                    auth.signOut()
-                    val intent = Intent(applicationContext, SplashAndLogInActivity::class.java)
-                    intent.putExtra("hasLoggedOut", true)
-                    startActivity(intent)
-                    finish()
-
-                    return@setNavigationItemSelectedListener true
-
-                }*/
 
                 R.id.twitter -> {
 
@@ -331,12 +335,9 @@ class MainActivity : AppCompatActivity() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        val bookmarkDAO = BookmarkDatabase.getInstance(applicationContext).bookmarkDAO
-
-        repository = NewsRepository(bookmarkDAO)
         val factory =
             MainViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, factory).get(MainViewModel::class.java)
+        mainViewModel = ViewModelProvider(this, factory).get(MainViewModel::class.java)
 
         binding.refreshLayout.isRefreshing = true
 
@@ -344,6 +345,7 @@ class MainActivity : AppCompatActivity() {
         setUpRefreshLayout()
         setUpNavigationDrawer()
         checkNetworkState()
+        setUpBookmarkButton()
 
         binding.tabLayout.addOnTabSelectedListener(tabLayoutListener)
 
@@ -357,5 +359,7 @@ class MainActivity : AppCompatActivity() {
         else
             super.onBackPressed()
     }
+
+    override fun getLayout(): Int = R.layout.activity_main
 
 }
