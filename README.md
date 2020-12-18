@@ -25,7 +25,6 @@ Newzzzy uses the [News API](https://newsapi.org/) to fetch articles in a JSON fo
  
 - [Retrofit](https://square.github.io/retrofit/) - A type-safe HTTP client for Android and Java.
 - [Material Components for Android](https://github.com/material-components/material-components-android) - Modular and customizable Material Design UI components for Android.
-- [DataStore](https://developer.android.com/topic/libraries/architecture/datastore#preferences-datastore) - Jetpack DataStore is a data storage solution that allows you to store key-value pairs or typed objects with protocol buffers.
 
 
 
